@@ -12,7 +12,7 @@ A select component for angular, based on the select2 JQuery plugin. See the
 
 *The angular [press kit](https://angular.io/presskit.html) states that 3rd party
 projects should avoid the use of version numbers in their names. The name of
-this project is therefore changed from angular2-select to ng-select (since 
+this project is therefore changed from angular2-select to ng-select (since
 angular-select was not available on npm anymore).*
 
 *The npm package `angular2-select` will be deprecated, the upcoming beta.4
@@ -160,3 +160,33 @@ gulp build
 [ng-select]: https://basvandenberg.github.io/ng-select
 [plunker]: https://plnkr.co/edit/vxwV6zxEwZGVUVR5V6tg?p=preview
 [changelog]: https://github.com/basvandenberg/ng-select/releases
+
+
+## What I did:
+npm install -g yarn
+yarn
+yarn global add gulp
+gulp
+
+npm link
+
+In the application folder:
+    * npm npm uninstall ng-select
+    * npm link ng-select-custom
+
+If you encounter this error:
+    ERROR in Error encountered resolving symbol values statically.
+    Calling function 'makeDecorator', function calls are not supported. Consider replacing the function or lambda with a reference to an exported function,
+    resolving symbol NgModule in c:/Work/medsoft-web/node_modules/ng-select/node_modules/@angular/core/src/metadata/ng_module.d.ts,
+    resolving symbol NgModule in c:/Work/medsoft-web/node_modules/ng-select/node_modules/@angular/core/src/metadata.d.ts,
+    resolving symbol NgModule in c:/Work/medsoft-web/node_modules/ng-select/node_modules/@angular/core/src/core.d.ts,
+    resolving symbol NgModule in c:/Work/medsoft-web/node_modules/ng-select/node_modules/@angular/core/index.d.ts,
+    resolving symbol SelectModule in c:/Work/medsoft-web/node_modules/ng-select/dist/ng-select.d.ts,
+    resolving symbol SelectModule in c:/Work/medsoft-web/node_modules/ng-select/dist/ng-select.d.ts
+Please remove the node_modules (or rename it to .node_modules) from this project as described somewhere in https://github.com/angular/angular-cli/issues/3707
+
+
+Updated typescript version because of:
+    Error at C:/Work/ng-select-custom/node_modules/@types/jasmine/index.d.ts:39:38: A parameter initializer is only allowed in a function or constructor implementation.
+    Error at C:/Work/ng-select-custom/node_modules/@types/jasmine/index.d.ts:39:46: Cannot find name 'keyof'.
+    Error at C:/Work/ng-select-custom/node_modules/@types/jasmine/index.d.ts:39:52: '=' expected.

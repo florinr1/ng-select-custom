@@ -4,6 +4,10 @@ import {Diacritics} from './diacritics';
 export class OptionList {
 
     private _options: Array<Option>;
+    private _optionsListValueKey: string;
+    private _optionsListLabelKey: string;
+    private _maxDisplayedOptions: number;
+    private _maxDisplayedOptionsMessage: string;
 
     /* Consider using these for performance improvement. */
     // private _selection: Array<Option>;
@@ -13,14 +17,18 @@ export class OptionList {
     private _highlightedOption: Option = null;
     private _hasShown: boolean;
 
-    constructor(options: Array<any>) {
+    constructor(options: Array<any>, optionsListValueKey: string, optionsListLabelKey: string, maxDisplayedOptions: number, maxDisplayedOptionsMessage: string) {
+        this._optionsListValueKey = optionsListValueKey;
+        this._optionsListLabelKey = optionsListLabelKey;
+        this._maxDisplayedOptions = maxDisplayedOptions;
+        this._maxDisplayedOptionsMessage = maxDisplayedOptionsMessage;
 
         if (typeof options === 'undefined' || options === null) {
             options = [];
         }
 
         this._options = options.map((option) => {
-            let o: Option = new Option(option.value, option.label);
+            let o: Option = new Option(option[this._optionsListValueKey], option[this._optionsListLabelKey]);
             if (option.disabled) {
                 o.disable();
             }
@@ -87,9 +95,16 @@ export class OptionList {
     /** Filter. **/
 
     get filtered(): Array<Option> {
-        return this.options.filter((option) => {
+        let visibleItems = this.options.filter((option) => {
             return option.shown;
         });
+
+        if (visibleItems.length > this._maxDisplayedOptions) {
+            visibleItems = visibleItems.slice(0, this._maxDisplayedOptions);
+            visibleItems.push(new Option(undefined, this._maxDisplayedOptionsMessage));
+        }
+
+        return visibleItems;
     }
 
     filter(term: string): boolean {

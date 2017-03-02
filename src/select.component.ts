@@ -45,6 +45,10 @@ export class SelectComponent
     @Input() noFilter: number = 0;
     @Input() notFoundMsg: string = 'No results found';
     @Input() placeholder: string = '';
+    @Input() maxDisplayedOptions: number;
+    @Input() maxDisplayedOptionsMessage: string = 'Please filter the results';
+    @Input() optionsListValueKey: string = 'value';
+    @Input() optionsListLabelKey: string = 'label';
 
     @Output() opened: EventEmitter<null> = new EventEmitter<null>();
     @Output() closed: EventEmitter<null> = new EventEmitter<null>();
@@ -249,6 +253,8 @@ export class SelectComponent
         }
         else if (typeof v === 'string') {
             v = [v];
+        }else if (typeof v === 'number') {
+            v = [String(v)];
         }
         else if (!Array.isArray(v)) {
             throw new TypeError('Value must be a string or an array.');
@@ -279,7 +285,7 @@ export class SelectComponent
             v = this.optionList.value;
         }
 
-        this.optionList = new OptionList(this.options);
+        this.optionList = new OptionList(this.options, this.optionsListValueKey, this.optionsListLabelKey, this.maxDisplayedOptions, this.maxDisplayedOptionsMessage);
 
         if (!firstTime) {
             this.optionList.value = v;
