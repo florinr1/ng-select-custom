@@ -1,9 +1,9 @@
 {
-  "name": "ng-select",
+  "name": "ng-select-custom",
   "version": "1.0.0-beta.3",
   "description": "Select component for angular.",
   "main": "index.js",
-  "repository": "git@github.com:basvandenberg/ng-select.git",
+  "repository": "git@github.com:florinr1/ng-select-custom.git",
   "keywords": [
     "angular",
     "select",
@@ -11,12 +11,8 @@
     "selectize",
     "chosen"
   ],
-  "author": "Bastiaan van den Berg <b.a.vandenberg@gmail.com>",
+  "author": "Florin Racila",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/basvandenberg/ng-select/issues"
-  },
-  "homepage": "https://basvandenberg.github.io/ng-select",
   "dependencies": {},
   "devDependencies": {
     "@angular/common": "^2.4.9",
