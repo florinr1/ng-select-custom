@@ -41,10 +41,14 @@ select-dropdown {
                     cursor: pointer;
                     user-select: none;
                 }
+
+                .max-message {
+                    background-color: #FFBEBE;
+                }
             }
         }
     }
-        
+
     .selected {
         background-color: #e0e0e0;
 
