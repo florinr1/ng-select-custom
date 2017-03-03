@@ -7,7 +7,6 @@ export class OptionList {
     private _optionsListValueKey: string;
     private _optionsListLabelKey: string;
     private _maxDisplayedOptions: number;
-    private _maxDisplayedOptionsMessage: string;
 
     /* Consider using these for performance improvement. */
     // private _selection: Array<Option>;
@@ -16,19 +15,20 @@ export class OptionList {
 
     private _highlightedOption: Option = null;
     private _hasShown: boolean;
+    private _hasMaxDisplayedOptions: boolean;
 
-    constructor(options: Array<any>, optionsListValueKey: string, optionsListLabelKey: string, maxDisplayedOptions: number, maxDisplayedOptionsMessage: string) {
+    constructor(options: Array<any>, optionsListValueKey: string, optionsListLabelKey: string, maxDisplayedOptions: number) {
         this._optionsListValueKey = optionsListValueKey;
         this._optionsListLabelKey = optionsListLabelKey;
         this._maxDisplayedOptions = maxDisplayedOptions;
-        this._maxDisplayedOptionsMessage = maxDisplayedOptionsMessage;
 
         if (typeof options === 'undefined' || options === null) {
             options = [];
         }
 
         this._options = options.map((option) => {
-            let o: Option = new Option(option[this._optionsListValueKey], option[this._optionsListLabelKey]);
+            // Convert the value to string to match the default HTML select behaviour
+            let o: Option = new Option(String(option[this._optionsListValueKey]), option[this._optionsListLabelKey]);
             if (option.disabled) {
                 o.disable();
             }
@@ -101,7 +101,9 @@ export class OptionList {
 
         if (visibleItems.length > this._maxDisplayedOptions) {
             visibleItems = visibleItems.slice(0, this._maxDisplayedOptions);
-            visibleItems.push(new Option(undefined, this._maxDisplayedOptionsMessage));
+            this._hasMaxDisplayedOptions = true;
+        } else {
+            this._hasMaxDisplayedOptions = false;
         }
 
         return visibleItems;
@@ -203,6 +205,14 @@ export class OptionList {
 
     get hasShown(): boolean {
         return this._hasShown;
+    }
+
+    /**
+     * Returns true if the list contains displays more items than _hasMaxDisplayedOptions
+     * @returns {boolean}
+     */
+    get hasMaxDisplayedOptions(): boolean {
+        return this._hasMaxDisplayedOptions;
     }
 
     hasSelected() {

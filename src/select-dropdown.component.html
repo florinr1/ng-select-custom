@@ -26,6 +26,11 @@
                 class="message">
                 {{notFoundMsg}}
             </li>
+            <li
+                *ngIf="optionList.hasMaxDisplayedOptions"
+                class="message">
+                {{maxDisplayedOptionsMessage}}
+            </li>
         </ul>
     </div>
 </div>

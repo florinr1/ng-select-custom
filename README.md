@@ -184,6 +184,10 @@ If you encounter this error:
     resolving symbol SelectModule in c:/Work/medsoft-web/node_modules/ng-select/dist/ng-select.d.ts,
     resolving symbol SelectModule in c:/Work/medsoft-web/node_modules/ng-select/dist/ng-select.d.ts
 Please remove the node_modules (or rename it to .node_modules) from this project as described somewhere in https://github.com/angular/angular-cli/issues/3707
+My build steps:
+    mv .node_modules node_modules
+    gulp build
+    mv node_modules .node_modules
 
 
 Updated typescript version because of:

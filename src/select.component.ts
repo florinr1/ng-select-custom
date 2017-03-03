@@ -25,7 +25,7 @@ export const SELECT_VALUE_ACCESSOR: ExistingProvider = {
 };
 
 @Component({
-    selector: 'ng-select',
+    selector: 'ng-select-custom',
     template: TEMPLATE,
     styles: [STYLE],
     providers: [SELECT_VALUE_ACCESSOR],
@@ -49,6 +49,12 @@ export class SelectComponent
     @Input() maxDisplayedOptionsMessage: string = 'Please filter the results';
     @Input() optionsListValueKey: string = 'value';
     @Input() optionsListLabelKey: string = 'label';
+    /**
+     * If true, the component emits the value changed event immediately after setting it even if the options are not loaded.
+     * This feature enables loading the data for linked components (e.g. address: country->county->city->street)
+     * @type {boolean}
+     */
+    @Input() notifyChangeBeforeOptionsLoaded: boolean = false;
 
     @Output() opened: EventEmitter<null> = new EventEmitter<null>();
     @Output() closed: EventEmitter<null> = new EventEmitter<null>();
@@ -74,6 +80,8 @@ export class SelectComponent
     isDisabled: boolean = false;
     isOpen: boolean = false;
     placeholderView: string = '';
+    keepValueUntilFirstOptionsAreSet = true;
+    _internalValue: any;
 
     clearClicked: boolean = false;
     selectContainerClicked: boolean = false;
@@ -101,6 +109,24 @@ export class SelectComponent
     ngOnChanges(changes: any) {
         if (changes.hasOwnProperty('options')) {
             this.updateOptionsList(changes['options'].isFirstChange());
+
+            if (this.keepValueUntilFirstOptionsAreSet
+                && (changes['options'].isFirstChange() || !changes['options'].previousValue)
+                && !!changes['options'].currentValue) {
+                // allow changing the value if the current value is set and the previous is not set or is first change (first change holds an empty object as the previous value)
+                this.keepValueUntilFirstOptionsAreSet = false;
+
+                if (this._internalValue && this._internalValue.length) {
+                    // at the beginning, the component does not have any selection ( _internalValue = [] )
+                    // do not emit value changed for undefined values
+                    this.optionList.value = this._internalValue;
+
+                    if (!this.notifyChangeBeforeOptionsLoaded) {
+                        // if the value changed has not triggered when setting the internal model, do it now
+                        this.valueChanged();
+                    }
+                }
+            }
         }
         if (changes.hasOwnProperty('noFilter')) {
             let numOptions: number = this.optionList.options.length;
@@ -244,6 +270,11 @@ export class SelectComponent
     /** Value. **/
 
     get value(): any {
+        // retrieve the internal value until the options are loaded
+        if (this.keepValueUntilFirstOptionsAreSet) {
+            return this.multiple ? this._internalValue : this._internalValue[0];
+        }
+
         return this.multiple ? this._value : this._value[0];
     }
 
@@ -253,11 +284,22 @@ export class SelectComponent
         }
         else if (typeof v === 'string') {
             v = [v];
-        }else if (typeof v === 'number') {
+        } else if (typeof v === 'number') {
             v = [String(v)];
         }
         else if (!Array.isArray(v)) {
             throw new TypeError('Value must be a string or an array.');
+        }
+
+        // capture the internal model until the optins are loaded
+        // don't emit a value changed event
+        if (this.keepValueUntilFirstOptionsAreSet) {
+            this._internalValue = v;
+
+            if (this.notifyChangeBeforeOptionsLoaded) {
+                this.valueChanged();
+            }
+            return;
         }
 
         if (!OptionList.equalValues(v, this._value)) {
@@ -281,15 +323,20 @@ export class SelectComponent
     private updateOptionsList(firstTime: boolean) {
         let v: Array<string>;
 
-        if (!firstTime) {
+        if (!firstTime && !this.keepValueUntilFirstOptionsAreSet) {
+            // preserve the selected value on second+ run
             v = this.optionList.value;
         }
 
-        this.optionList = new OptionList(this.options, this.optionsListValueKey, this.optionsListLabelKey, this.maxDisplayedOptions, this.maxDisplayedOptionsMessage);
+        this.optionList = new OptionList(this.options, this.optionsListValueKey, this.optionsListLabelKey, this.maxDisplayedOptions);
 
-        if (!firstTime) {
+        if (!firstTime && !this.keepValueUntilFirstOptionsAreSet) {
             this.optionList.value = v;
-            this.valueChanged();
+
+            if (!OptionList.equalValues(this.optionList.value, v)) {
+                // emit value changed only if the new options does not contain the old values
+                this.valueChanged();
+            }
         }
     }
 
