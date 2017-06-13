@@ -3,7 +3,10 @@
         "declaration": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "lib": ["es6", "dom"],
+        "lib": [
+            "es6",
+            "dom"
+        ],
         "module": "commonjs",
         "moduleResolution": "node",
         "noImplicitAny": false,
@@ -18,6 +21,11 @@
     "files": [
         "ng-select.ts"
     ],
+    "paths": {
+        "@angular/*": [
+            "../node_modules/@angular/*"
+        ]
+    },
     "angularCompilerOptions": {
         "genDir": "../aot",
         "strictMetadataEmit": true
