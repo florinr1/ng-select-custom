@@ -17,7 +17,7 @@ import {TEMPLATE} from './select.component.html';
 import {SelectDropdownComponent} from './select-dropdown.component';
 import {Option} from './option';
 import {OptionList} from './option-list';
-import {noop} from "../_node_modules/rxjs/src/util/noop";
+import {noop} from 'rxjs/util/noop';
 
 export const SELECT_VALUE_ACCESSOR: ExistingProvider = {
     provide: NG_VALUE_ACCESSOR,
@@ -357,8 +357,6 @@ export class SelectComponent implements AfterViewInit, ControlValueAccessor, OnC
      * @param v The value that was not found
      */
     private loadFallbackOption(v: Array<string>) {
-        debugger;
-
         if (!this.fetchFallbackOption || !v || !v.length) {
             // fall back function has not been set
             // OR value has not been given
