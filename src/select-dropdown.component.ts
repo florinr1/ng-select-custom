@@ -22,8 +22,7 @@ import {OptionList} from './option-list';
     encapsulation: ViewEncapsulation.None
 })
 
-export class SelectDropdownComponent
-        implements AfterViewInit, OnChanges, OnInit {
+export class SelectDropdownComponent implements AfterViewInit, OnChanges, OnInit {
 
     @Input() filterEnabled: boolean;
     @Input() highlightColor: string;
@@ -71,7 +70,7 @@ export class SelectDropdownComponent
 
     // Filter input (single select).
 
-    onSingleFilterClick(event: any) {
+    onSingleFilterClick() {
         this.singleFilterClick.emit(null);
     }
 

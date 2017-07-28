@@ -7,6 +7,7 @@ export class Option {
     highlighted: boolean;
     selected: boolean;
     shown: boolean;
+    inactive: boolean;
 
     constructor(value: string, label: string) {
         this.value = value;

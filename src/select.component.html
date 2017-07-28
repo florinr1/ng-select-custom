@@ -2,7 +2,7 @@
     #selection
     [attr.tabindex]="disabled ? null : 0"
     [ngClass]="{'open': isOpen, 'focus': hasFocus, 'below': isBelow, 'disabled': disabled}"
-    (click)="onSelectContainerClick($event)"
+    (click)="onSelectContainerClick()"
     (focus)="onSelectContainerFocus()"
     (keydown)="onSelectContainerKeydown($event)"
     (window:click)="onWindowClick()"
@@ -20,7 +20,7 @@
         </div>
         <div class="clear"
             *ngIf="allowClear && hasSelected"
-            (click)="onClearSelectionClick($event)">
+            (click)="onClearSelectionClick()">
             &#x2715;
         </div>
         <div class="toggle"

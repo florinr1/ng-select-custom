@@ -2,20 +2,20 @@
     [ngStyle]="{'top.px': top, 'left.px': left, 'width.px': width}">
 
     <div class="filter"
-        *ngIf="!multiple && filterEnabled">
+         *ngIf="!multiple && filterEnabled">
         <input
             #filterInput
-            (click)="onSingleFilterClick($event)"
+            (click)="onSingleFilterClick()"
             (input)="onSingleFilterInput($event)"
             (keydown)="onSingleFilterKeydown($event)">
     </div>
 
     <div class="options"
-        #optionsList>
+         #optionsList>
         <ul
             (wheel)="onOptionsWheel($event)">
             <li *ngFor="let option of optionList.filtered"
-                [ngClass]="{'highlighted': option.highlighted, 'selected': option.selected, 'disabled': option.disabled}"
+                [ngClass]="{'highlighted': option.highlighted, 'selected': option.selected, 'disabled': option.disabled, 'inactive': option.inactive}"
                 [ngStyle]="getOptionStyle(option)"
                 (click)="onOptionClick(option)"
                 (mouseover)="onOptionMouseover(option)">
