@@ -11,8 +11,24 @@ export declare class OptionList {
     /** Options. **/
     readonly options: Array<Option>;
     getOptionsByValue(value: string): Array<Option>;
+    /**
+     * Create a new option at the end of the options list for a fallback option
+     * @param {string} label The label to be displayed
+     * @param {string} value The value of the option
+     */
+    pushFallbackOption(label: string, value: string): void;
     /** Value. **/
+    /**
+     * @deprecated
+     * @param v
+     */
     value: Array<string>;
+    /**
+     * Marks the options that match the given value as selected
+     * @param v The items to be selected
+     * @returns {boolean} True if at least one item has been selected
+     */
+    setValue(v: Array<string>): boolean;
     /** Selection. **/
     readonly selection: Array<Option>;
     select(option: Option, multiple: boolean): void;

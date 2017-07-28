@@ -10,8 +10,6 @@ var SelectDropdownComponent = (function () {
         this.singleFilterClick = new core_1.EventEmitter();
         this.singleFilterInput = new core_1.EventEmitter();
         this.singleFilterKeydown = new core_1.EventEmitter();
-        this.disabledColor = '#fff';
-        this.disabledTextColor = '9e9e9e';
     }
     /** Event handlers. **/
     // Angular life cycle hooks.
@@ -30,7 +28,7 @@ var SelectDropdownComponent = (function () {
         }
     };
     // Filter input (single select).
-    SelectDropdownComponent.prototype.onSingleFilterClick = function (event) {
+    SelectDropdownComponent.prototype.onSingleFilterClick = function () {
         this.singleFilterClick.emit(null);
     };
     SelectDropdownComponent.prototype.onSingleFilterInput = function (event) {
@@ -55,21 +53,6 @@ var SelectDropdownComponent = (function () {
         this.optionList.highlight();
     };
     /** View. **/
-    SelectDropdownComponent.prototype.getOptionStyle = function (option) {
-        if (option.highlighted) {
-            var style = {};
-            if (typeof this.highlightColor !== 'undefined') {
-                style['background-color'] = this.highlightColor;
-            }
-            if (typeof this.highlightTextColor !== 'undefined') {
-                style['color'] = this.highlightTextColor;
-            }
-            return style;
-        }
-        else {
-            return {};
-        }
-    };
     SelectDropdownComponent.prototype.clearFilterInput = function () {
         if (this.filterEnabled) {
             this.filterInput.nativeElement.value = '';
@@ -119,8 +102,6 @@ SelectDropdownComponent.decorators = [
 SelectDropdownComponent.ctorParameters = function () { return []; };
 SelectDropdownComponent.propDecorators = {
     'filterEnabled': [{ type: core_1.Input },],
-    'highlightColor': [{ type: core_1.Input },],
-    'highlightTextColor': [{ type: core_1.Input },],
     'left': [{ type: core_1.Input },],
     'multiple': [{ type: core_1.Input },],
     'notFoundMsg': [{ type: core_1.Input },],
