@@ -69,4 +69,8 @@ select-dropdown {
         cursor: default;
         pointer-events: none;
     }
+
+    .inactive {
+        font-style: italic;
+    }
 }

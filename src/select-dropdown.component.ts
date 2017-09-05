@@ -22,12 +22,9 @@ import {OptionList} from './option-list';
     encapsulation: ViewEncapsulation.None
 })
 
-export class SelectDropdownComponent
-        implements AfterViewInit, OnChanges, OnInit {
+export class SelectDropdownComponent implements AfterViewInit, OnChanges, OnInit {
 
     @Input() filterEnabled: boolean;
-    @Input() highlightColor: string;
-    @Input() highlightTextColor: string;
     @Input() left: number;
     @Input() multiple: boolean;
     @Input() notFoundMsg: string;
@@ -44,9 +41,6 @@ export class SelectDropdownComponent
 
     @ViewChild('filterInput') filterInput: any;
     @ViewChild('optionsList') optionsList: any;
-
-    disabledColor: string = '#fff';
-    disabledTextColor: string = '9e9e9e';
 
     /** Event handlers. **/
 
@@ -71,7 +65,7 @@ export class SelectDropdownComponent
 
     // Filter input (single select).
 
-    onSingleFilterClick(event: any) {
+    onSingleFilterClick() {
         this.singleFilterClick.emit(null);
     }
 
@@ -105,23 +99,6 @@ export class SelectDropdownComponent
     }
 
     /** View. **/
-
-    getOptionStyle(option: Option): any {
-        if (option.highlighted) {
-            let style: any = {};
-
-            if (typeof this.highlightColor !== 'undefined') {
-                style['background-color'] = this.highlightColor;
-            }
-            if (typeof this.highlightTextColor !== 'undefined') {
-                style['color'] = this.highlightTextColor;
-            }
-            return style;
-        }
-        else {
-            return {};
-        }
-    }
 
     clearFilterInput() {
         if (this.filterEnabled) {

@@ -1,34 +1,25 @@
 <div
     [ngStyle]="{'top.px': top, 'left.px': left, 'width.px': width}">
 
-    <div class="filter"
-        *ngIf="!multiple && filterEnabled">
-        <input
-            #filterInput
-            (click)="onSingleFilterClick($event)"
-            (input)="onSingleFilterInput($event)"
-            (keydown)="onSingleFilterKeydown($event)">
+    <div *ngIf="!multiple && filterEnabled" class="filter">
+        <input #filterInput
+               (click)="onSingleFilterClick()"
+               (input)="onSingleFilterInput($event)"
+               (keydown)="onSingleFilterKeydown($event)">
     </div>
 
-    <div class="options"
-        #optionsList>
-        <ul
-            (wheel)="onOptionsWheel($event)">
+    <div class="options" #optionsList>
+        <ul (wheel)="onOptionsWheel($event)">
             <li *ngFor="let option of optionList.filtered"
-                [ngClass]="{'highlighted': option.highlighted, 'selected': option.selected, 'disabled': option.disabled}"
-                [ngStyle]="getOptionStyle(option)"
+                [ngClass]="{'highlighted': option.highlighted, 'selected': option.selected, 'disabled': option.disabled, 'inactive': option.inactive}"
                 (click)="onOptionClick(option)"
                 (mouseover)="onOptionMouseover(option)">
                 {{option.label}}
             </li>
-            <li
-                *ngIf="!optionList.hasShown"
-                class="message">
+            <li *ngIf="!optionList.hasShown" class="message">
                 {{notFoundMsg}}
             </li>
-            <li
-                *ngIf="optionList.hasMaxDisplayedOptions"
-                class="max-message">
+            <li *ngIf="optionList.hasMaxDisplayedOptions" class="max-message">
                 {{maxDisplayedOptionsMessage}}
             </li>
         </ul>

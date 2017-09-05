@@ -40,6 +40,17 @@ var OptionList = (function () {
             return option.value === value;
         });
     };
+    /**
+     * Create a new option at the end of the options list for a fallback option
+     * @param {string} label The label to be displayed
+     * @param {string} value The value of the option
+     */
+    OptionList.prototype.pushFallbackOption = function (label, value) {
+        // Convert the value to string to match the default HTML select behaviour
+        var o = new option_1.Option(value, label);
+        o.inactive = true;
+        this._options.push(o);
+    };
     Object.defineProperty(OptionList.prototype, "value", {
         /** Value. **/
         get: function () {
@@ -47,6 +58,10 @@ var OptionList = (function () {
                 return selectedOption.value;
             });
         },
+        /**
+         * @deprecated
+         * @param v
+         */
         set: function (v) {
             v = typeof v === 'undefined' || v === null ? [] : v;
             this.options.forEach(function (option) {
@@ -56,6 +71,20 @@ var OptionList = (function () {
         enumerable: true,
         configurable: true
     });
+    /**
+     * Marks the options that match the given value as selected
+     * @param v The items to be selected
+     * @returns {boolean} True if at least one item has been selected
+     */
+    OptionList.prototype.setValue = function (v) {
+        var oneItemsHasBeenSelected = false;
+        v = typeof v === 'undefined' || v === null ? [] : v;
+        this.options.forEach(function (option) {
+            option.selected = v.indexOf(option.value) > -1;
+            oneItemsHasBeenSelected = oneItemsHasBeenSelected || option.selected;
+        });
+        return oneItemsHasBeenSelected;
+    };
     Object.defineProperty(OptionList.prototype, "selection", {
         /** Selection. **/
         get: function () {

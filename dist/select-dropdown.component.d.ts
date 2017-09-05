@@ -3,8 +3,6 @@ import { Option } from './option';
 import { OptionList } from './option-list';
 export declare class SelectDropdownComponent implements AfterViewInit, OnChanges, OnInit {
     filterEnabled: boolean;
-    highlightColor: string;
-    highlightTextColor: string;
     left: number;
     multiple: boolean;
     notFoundMsg: string;
@@ -19,13 +17,11 @@ export declare class SelectDropdownComponent implements AfterViewInit, OnChanges
     singleFilterKeydown: EventEmitter<any>;
     filterInput: any;
     optionsList: any;
-    disabledColor: string;
-    disabledTextColor: string;
     /** Event handlers. **/
     ngOnInit(): void;
     ngOnChanges(changes: any): void;
     ngAfterViewInit(): void;
-    onSingleFilterClick(event: any): void;
+    onSingleFilterClick(): void;
     onSingleFilterInput(event: any): void;
     onSingleFilterKeydown(event: any): void;
     onOptionsWheel(event: any): void;
@@ -34,7 +30,6 @@ export declare class SelectDropdownComponent implements AfterViewInit, OnChanges
     /** Initialization. **/
     private optionsReset();
     /** View. **/
-    getOptionStyle(option: Option): any;
     clearFilterInput(): void;
     moveHighlightedIntoView(): void;
     private handleOptionsWheel(e);

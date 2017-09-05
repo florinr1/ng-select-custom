@@ -24,6 +24,7 @@ export declare class SelectComponent implements AfterViewInit, ControlValueAcces
      * @type {boolean}
      */
     notifyChangeBeforeOptionsLoaded: boolean;
+    fetchFallbackOption: any;
     opened: EventEmitter<null>;
     closed: EventEmitter<null>;
     selected: EventEmitter<any>;
@@ -57,7 +58,7 @@ export declare class SelectComponent implements AfterViewInit, ControlValueAcces
     ngOnChanges(changes: any): void;
     onWindowClick(): void;
     onWindowResize(): void;
-    onSelectContainerClick(event: any): void;
+    onSelectContainerClick(): void;
     onSelectContainerFocus(): void;
     onSelectContainerKeydown(event: any): void;
     onDropdownOptionClicked(option: Option): void;
@@ -67,7 +68,7 @@ export declare class SelectComponent implements AfterViewInit, ControlValueAcces
     onSingleFilterKeydown(event: any): void;
     onMultipleFilterInput(event: any): void;
     onMultipleFilterKeydown(event: any): void;
-    onClearSelectionClick(event: any): void;
+    onClearSelectionClick(): void;
     onDeselectOptionClick(option: Option): void;
     /** API. **/
     open(): void;
@@ -84,6 +85,12 @@ export declare class SelectComponent implements AfterViewInit, ControlValueAcces
     private valueChanged();
     /** Initialization. **/
     private updateOptionsList(firstTime);
+    /**
+     * The given value is not present in the options list.
+     * Try to get it from the fallback option
+     * @param v The value that was not found
+     */
+    private loadFallbackOption(v);
     /** Dropdown. **/
     private toggleDropdown();
     private openDropdown();

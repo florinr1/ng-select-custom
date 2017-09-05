@@ -51,6 +51,19 @@ export class OptionList {
         });
     }
 
+    /**
+     * Create a new option at the end of the options list for a fallback option
+     * @param {string} label The label to be displayed
+     * @param {string} value The value of the option
+     */
+    pushFallbackOption(label: string, value: string) {
+        // Convert the value to string to match the default HTML select behaviour
+        let o: Option = new Option(value, label);
+        o.inactive = true;
+
+        this._options.push(o);
+    }
+
     /** Value. **/
 
     get value(): Array<string> {
@@ -59,6 +72,27 @@ export class OptionList {
         });
     }
 
+    /**
+     * Marks the options that match the given value as selected
+     * @param v The items to be selected
+     * @returns {boolean} True if at least one item has been selected
+     */
+    setValue(v: Array<string>) {
+        let oneItemsHasBeenSelected = false;
+        v = typeof v === 'undefined' || v === null ? [] : v;
+
+        this.options.forEach((option) => {
+            option.selected = v.indexOf(option.value) > -1;
+            oneItemsHasBeenSelected = oneItemsHasBeenSelected || option.selected;
+        });
+
+        return oneItemsHasBeenSelected;
+    }
+
+    /**
+     * @deprecated
+     * @param v
+     */
     set value(v: Array<string>) {
         v = typeof v === 'undefined' || v === null ? [] : v;
 

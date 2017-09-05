@@ -17,6 +17,7 @@ import {TEMPLATE} from './select.component.html';
 import {SelectDropdownComponent} from './select-dropdown.component';
 import {Option} from './option';
 import {OptionList} from './option-list';
+import {noop} from 'rxjs/util/noop';
 
 export const SELECT_VALUE_ACCESSOR: ExistingProvider = {
     provide: NG_VALUE_ACCESSOR,
@@ -32,8 +33,7 @@ export const SELECT_VALUE_ACCESSOR: ExistingProvider = {
     encapsulation: ViewEncapsulation.None
 })
 
-export class SelectComponent
-        implements AfterViewInit, ControlValueAccessor, OnChanges, OnInit {
+export class SelectComponent implements AfterViewInit, ControlValueAccessor, OnChanges, OnInit {
 
     @Input() options: Array<any>;
 
@@ -55,6 +55,7 @@ export class SelectComponent
      * @type {boolean}
      */
     @Input() notifyChangeBeforeOptionsLoaded: boolean = false;
+    @Input() fetchFallbackOption: any;
 
     @Output() opened: EventEmitter<null> = new EventEmitter<null>();
     @Output() closed: EventEmitter<null> = new EventEmitter<null>();
@@ -91,8 +92,8 @@ export class SelectComponent
     top: number;
     left: number;
 
-    private onChange = (_: any) => {};
-    private onTouched = () => {};
+    private onChange;
+    private onTouched;
 
     /** Event handlers. **/
 
@@ -119,7 +120,11 @@ export class SelectComponent
                 if (this._internalValue && this._internalValue.length) {
                     // at the beginning, the component does not have any selection ( _internalValue = [] )
                     // do not emit value changed for undefined values
-                    this.optionList.value = this._internalValue;
+                    if (!this.optionList.setValue(this._internalValue)) {
+                        // the value does not exists in the options list
+                        // try to load fallback
+                        this.loadFallbackOption(this._internalValue);
+                    }
 
                     if (!this.notifyChangeBeforeOptionsLoaded) {
                         // if the value changed has not triggered when setting the internal model, do it now
@@ -151,7 +156,7 @@ export class SelectComponent
 
     // Select container.
 
-    onSelectContainerClick(event: any) {
+    onSelectContainerClick() {
         this.selectContainerClicked = true;
         if (!this.clearClicked) {
             this.toggleDropdown();
@@ -159,7 +164,7 @@ export class SelectComponent
     }
 
     onSelectContainerFocus() {
-        this.onTouched();
+        this.onTouched && this.onTouched();
     }
 
     onSelectContainerKeydown(event: any) {
@@ -169,8 +174,7 @@ export class SelectComponent
     // Dropdown container.
 
     onDropdownOptionClicked(option: Option) {
-        this.multiple ?
-            this.toggleSelectOption(option) : this.selectOption(option);
+        this.multiple ? this.toggleSelectOption(option) : this.selectOption(option);
     }
 
     onDropdownClose(focus: any) {
@@ -215,7 +219,7 @@ export class SelectComponent
 
     // Single clear select.
 
-    onClearSelectionClick(event: any) {
+    onClearSelectionClick() {
         this.clearClicked = true;
         this.clearSelection();
         this.closeDropdown(true);
@@ -291,7 +295,7 @@ export class SelectComponent
             throw new TypeError('Value must be a string or an array.');
         }
 
-        // capture the internal model until the optins are loaded
+        // capture the internal model until the options are loaded
         // don't emit a value changed event
         if (this.keepValueUntilFirstOptionsAreSet) {
             this._internalValue = v;
@@ -303,7 +307,12 @@ export class SelectComponent
         }
 
         if (!OptionList.equalValues(v, this._value)) {
-            this.optionList.value = v;
+            // The new value is different from the old one
+            if (!this.optionList.setValue(v)) {
+                // the value does not exists in the options list
+                // try to load fallback
+                this.loadFallbackOption(v);
+            }
             this.valueChanged();
         }
     }
@@ -315,7 +324,7 @@ export class SelectComponent
         this.placeholderView = this.hasSelected ? '' : this.placeholder;
         this.updateFilterWidth();
 
-        this.onChange(this.value);
+        this.onChange && this.onChange(this.value);
     }
 
     /** Initialization. **/
@@ -331,13 +340,39 @@ export class SelectComponent
         this.optionList = new OptionList(this.options, this.optionsListValueKey, this.optionsListLabelKey, this.maxDisplayedOptions);
 
         if (!firstTime && !this.keepValueUntilFirstOptionsAreSet) {
-            this.optionList.value = v;
+            if (!this.optionList.setValue(v)) {
+                this.loadFallbackOption(v);
+            }
 
             if (!OptionList.equalValues(this.optionList.value, v)) {
                 // emit value changed only if the new options does not contain the old values
                 this.valueChanged();
             }
         }
+    }
+
+    /**
+     * The given value is not present in the options list.
+     * Try to get it from the fallback option
+     * @param v The value that was not found
+     */
+    private loadFallbackOption(v: Array<string>) {
+        if (!this.fetchFallbackOption || !v || !v.length) {
+            // fall back function has not been set
+            // OR value has not been given
+            return;
+        }
+
+        Promise.resolve(this.fetchFallbackOption(v[0]))
+            .then(label => {
+                if (label) {
+                    // push this option to the options list
+                    this.optionList.pushFallbackOption(label, v[0]);
+                    this.optionList.setValue(v);
+                    this.valueChanged();
+                }
+            })
+            .catch(noop);
     }
 
     /** Dropdown. **/
@@ -472,7 +507,7 @@ export class SelectComponent
 
         if (this.isOpen) {
             if (key === this.KEYS.ESC ||
-                    (key === this.KEYS.UP && event.altKey)) {
+                (key === this.KEYS.UP && event.altKey)) {
                 this.closeDropdown(true);
             }
             else if (key === this.KEYS.TAB) {
@@ -498,7 +533,7 @@ export class SelectComponent
         }
         else {
             if (key === this.KEYS.ENTER || key === this.KEYS.SPACE ||
-                    (key === this.KEYS.DOWN && event.altKey)) {
+                (key === this.KEYS.DOWN && event.altKey)) {
 
                 /* FIREFOX HACK:
                  *
@@ -506,7 +541,9 @@ export class SelectComponent
                  * to be triggered for the filter input field, which causes
                  * the dropdown to be closed again.
                  */
-                setTimeout(() => { this.openDropdown(); });
+                setTimeout(() => {
+                    this.openDropdown();
+                });
             }
         }
 
@@ -517,7 +554,7 @@ export class SelectComponent
 
         if (key === this.KEYS.BACKSPACE) {
             if (this.hasSelected && this.filterEnabled &&
-                    this.filterInput.nativeElement.value === '') {
+                this.filterInput.nativeElement.value === '') {
                 this.deselectLast();
             }
         }
@@ -527,8 +564,8 @@ export class SelectComponent
         let key = event.which;
 
         if (key === this.KEYS.ESC || key === this.KEYS.TAB
-                || key === this.KEYS.UP || key === this.KEYS.DOWN
-                || key === this.KEYS.ENTER) {
+            || key === this.KEYS.UP || key === this.KEYS.DOWN
+            || key === this.KEYS.ENTER) {
             this.handleSelectContainerKeydown(event);
         }
     }
