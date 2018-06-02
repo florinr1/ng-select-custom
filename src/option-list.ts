@@ -7,6 +7,7 @@ export class OptionList {
     private _optionsListValueKey: string;
     private _optionsListLabelKey: string;
     private _maxDisplayedOptions: number;
+    private _optionsListColorKey: string;
 
     /* Consider using these for performance improvement. */
     // private _selection: Array<Option>;
@@ -17,10 +18,11 @@ export class OptionList {
     private _hasShown: boolean;
     private _hasMaxDisplayedOptions: boolean;
 
-    constructor(options: Array<any>, optionsListValueKey: string, optionsListLabelKey: string, maxDisplayedOptions: number) {
+    constructor(options: Array<any>, optionsListValueKey: string, optionsListLabelKey: string, maxDisplayedOptions: number, optionsListColorKey?: string) {
         this._optionsListValueKey = optionsListValueKey;
         this._optionsListLabelKey = optionsListLabelKey;
         this._maxDisplayedOptions = maxDisplayedOptions;
+        this._optionsListColorKey = optionsListColorKey;
 
         if (typeof options === 'undefined' || options === null) {
             options = [];
@@ -28,7 +30,7 @@ export class OptionList {
 
         this._options = options.map((option) => {
             // Convert the value to string to match the default HTML select behaviour
-            let o: Option = new Option(String(option[this._optionsListValueKey]), option[this._optionsListLabelKey]);
+            let o: Option = new Option(String(option[this._optionsListValueKey]), option[this._optionsListLabelKey], option[this._optionsListColorKey]);
             if (option.disabled) {
                 o.disable();
             }
