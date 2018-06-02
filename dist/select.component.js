@@ -256,7 +256,7 @@ var SelectComponent = (function () {
             // preserve the selected value on second+ run
             v = this.optionList.value;
         }
-        this.optionList = new option_list_1.OptionList(this.options, this.optionsListValueKey, this.optionsListLabelKey, this.maxDisplayedOptions);
+        this.optionList = new option_list_1.OptionList(this.options, this.optionsListValueKey, this.optionsListLabelKey, this.maxDisplayedOptions, this.optionsListColorKey);
         if (!firstTime && !this.keepValueUntilFirstOptionsAreSet) {
             if (!this.optionList.setValue(v)) {
                 this.loadFallbackOption(v);

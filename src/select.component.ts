@@ -338,7 +338,7 @@ export class SelectComponent implements AfterViewInit, ControlValueAccessor, OnC
             v = this.optionList.value;
         }
 
-        this.optionList = new OptionList(this.options, this.optionsListValueKey, this.optionsListLabelKey, this.maxDisplayedOptions);
+        this.optionList = new OptionList(this.options, this.optionsListValueKey, this.optionsListLabelKey, this.maxDisplayedOptions, this.optionsListColorKey);
 
         if (!firstTime && !this.keepValueUntilFirstOptionsAreSet) {
             if (!this.optionList.setValue(v)) {
