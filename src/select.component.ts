@@ -625,4 +625,14 @@ export class SelectComponent implements AfterViewInit, ControlValueAccessor, OnC
         const L = (0.2126 * c[0]) + (0.7152 * c[1]) + (0.0722 * c[2]);
         return (L > 0.179) ? darkColor : lightColor;
       }
+
+      getStyleForMultipleTags(option) {
+          if (this.customColoredTags && option) {
+              return {
+                  color: this.pickTextColorBasedOnBgColor(option.color) + ' !important',
+                  backgroundColor: option.color
+              };
+          }
+          return {};
+      }
 }

@@ -502,6 +502,15 @@ var SelectComponent = (function () {
         var L = (0.2126 * c[0]) + (0.7152 * c[1]) + (0.0722 * c[2]);
         return (L > 0.179) ? darkColor : lightColor;
     };
+    SelectComponent.prototype.getStyleForMultipleTags = function (option) {
+        if (this.customColoredTags && option) {
+            return {
+                color: this.pickTextColorBasedOnBgColor(option.color) + ' !important',
+                backgroundColor: option.color
+            };
+        }
+        return {};
+    };
     return SelectComponent;
 }());
 SelectComponent.decorators = [

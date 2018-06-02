@@ -36,8 +36,7 @@
     <div class="multiple"
         *ngIf="multiple">
         <div class="option"
-            [style.color]="customColoredTags ? pickTextColorBasedOnBgColor(option.color) + ' !important' : null"
-            [style.backgroundColor]="customColoredTags ? option.color : null"
+            [ngStyle]="getStyleForMultipleTags(option)"
             *ngFor="let option of optionList.selection">
             <span class="deselect-option"
                 (click)=onDeselectOptionClick(option)>
