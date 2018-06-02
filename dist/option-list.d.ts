@@ -4,10 +4,11 @@ export declare class OptionList {
     private _optionsListValueKey;
     private _optionsListLabelKey;
     private _maxDisplayedOptions;
+    private _optionsListColorKey;
     private _highlightedOption;
     private _hasShown;
     private _hasMaxDisplayedOptions;
-    constructor(options: Array<any>, optionsListValueKey: string, optionsListLabelKey: string, maxDisplayedOptions: number);
+    constructor(options: Array<any>, optionsListValueKey: string, optionsListLabelKey: string, maxDisplayedOptions: number, optionsListColorKey?: string);
     /** Options. **/
     readonly options: Array<Option>;
     getOptionsByValue(value: string): Array<Option>;

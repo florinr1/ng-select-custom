@@ -22,6 +22,7 @@ var SelectComponent = (function () {
         this.maxDisplayedOptionsMessage = 'Please filter the results';
         this.optionsListValueKey = 'value';
         this.optionsListLabelKey = 'label';
+        this.optionsListColorKey = 'color';
         /**
          * If true, the component emits the value changed event immediately after setting it even if the options are not loaded.
          * This feature enables loading the data for linked components (e.g. address: country->county->city->street)
@@ -480,6 +481,26 @@ var SelectComponent = (function () {
                 1 + this.placeholderView.length * 10 : 1 + value.length * 10;
         }
     };
+    SelectComponent.pickTextColorBasedOnBgColor = function (bgColor, lightColor, darkColor) {
+        if (lightColor === void 0) { lightColor = '#ffffff'; }
+        if (darkColor === void 0) { darkColor = '#000000'; }
+        if (!bgColor) {
+            return darkColor;
+        }
+        var color = (bgColor.charAt(0) === '#') ? bgColor.substring(1, 7) : bgColor;
+        var r = parseInt(color.substring(0, 2), 16); // hexToR
+        var g = parseInt(color.substring(2, 4), 16); // hexToG
+        var b = parseInt(color.substring(4, 6), 16); // hexToB
+        var uicolors = [r / 255, g / 255, b / 255];
+        var c = uicolors.map(function (col) {
+            if (col <= 0.03928) {
+                return col / 12.92;
+            }
+            return Math.pow((col + 0.055) / 1.055, 2.4);
+        });
+        var L = (0.2126 * c[0]) + (0.7152 * c[1]) + (0.0722 * c[2]);
+        return (L > 0.179) ? darkColor : lightColor;
+    };
     return SelectComponent;
 }());
 SelectComponent.decorators = [
@@ -507,6 +528,7 @@ SelectComponent.propDecorators = {
     'maxDisplayedOptionsMessage': [{ type: core_1.Input },],
     'optionsListValueKey': [{ type: core_1.Input },],
     'optionsListLabelKey': [{ type: core_1.Input },],
+    'optionsListColorKey': [{ type: core_1.Input },],
     'notifyChangeBeforeOptionsLoaded': [{ type: core_1.Input },],
     'fetchFallbackOption': [{ type: core_1.Input },],
     'opened': [{ type: core_1.Output },],

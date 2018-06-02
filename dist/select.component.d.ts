@@ -18,6 +18,7 @@ export declare class SelectComponent implements AfterViewInit, ControlValueAcces
     maxDisplayedOptionsMessage: string;
     optionsListValueKey: string;
     optionsListLabelKey: string;
+    optionsListColorKey: string;
     /**
      * If true, the component emits the value changed event immediately after setting it even if the options are not loaded.
      * This feature enables loading the data for linked components (e.g. address: country->county->city->street)
@@ -116,4 +117,5 @@ export declare class SelectComponent implements AfterViewInit, ControlValueAcces
     updateWidth(): void;
     updatePosition(): void;
     updateFilterWidth(): void;
+    static pickTextColorBasedOnBgColor(bgColor: any, lightColor?: string, darkColor?: string): string;
 }

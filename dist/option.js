@@ -1,9 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Option = (function () {
-    function Option(value, label) {
+    function Option(value, label, color) {
+        if (color === void 0) { color = '#eee'; }
         this.value = value;
         this.label = label;
+        this.color = color;
         this.disabled = false;
         this.highlighted = false;
         this.selected = false;
