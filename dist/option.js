@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var Option = (function () {
     function Option(value, label, color) {
-        if (color === void 0) { color = '#eee'; }
+        if (color === void 0) { color = '#eeeeee'; }
         this.value = value;
         this.label = label;
         this.color = color;
