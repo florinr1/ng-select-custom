@@ -1,10 +1,12 @@
 import { AfterViewInit, OnChanges, OnInit, EventEmitter, ExistingProvider } from '@angular/core';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { ControlValueAccessor } from '@angular/forms';
 import { SelectDropdownComponent } from './select-dropdown.component';
 import { Option } from './option';
 import { OptionList } from './option-list';
 export declare const SELECT_VALUE_ACCESSOR: ExistingProvider;
 export declare class SelectComponent implements AfterViewInit, ControlValueAccessor, OnChanges, OnInit {
+    private _sanitizer;
     options: Array<any>;
     allowClear: boolean;
     disabled: boolean;
@@ -55,6 +57,7 @@ export declare class SelectComponent implements AfterViewInit, ControlValueAcces
     private onChange;
     private onTouched;
     /** Event handlers. **/
+    constructor(_sanitizer: DomSanitizer);
     ngOnInit(): void;
     ngAfterViewInit(): void;
     ngOnChanges(changes: any): void;
@@ -119,5 +122,5 @@ export declare class SelectComponent implements AfterViewInit, ControlValueAcces
     updatePosition(): void;
     updateFilterWidth(): void;
     pickTextColorBasedOnBgColor(bgColor: any, lightColor?: string, darkColor?: string): string;
-    getStyleForMultipleTags(option: any): string;
+    getStyleForMultipleTags(option: any): SafeStyle;
 }

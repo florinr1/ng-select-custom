@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
+var platform_browser_1 = require("@angular/platform-browser");
 var forms_1 = require("@angular/forms");
 var select_component_css_1 = require("./select.component.css");
 var select_component_html_1 = require("./select.component.html");
@@ -12,7 +13,9 @@ exports.SELECT_VALUE_ACCESSOR = {
     multi: true
 };
 var SelectComponent = (function () {
-    function SelectComponent() {
+    /** Event handlers. **/
+    function SelectComponent(_sanitizer) {
+        this._sanitizer = _sanitizer;
         this.allowClear = false;
         this.disabled = false;
         this.multiple = false;
@@ -60,7 +63,6 @@ var SelectComponent = (function () {
             DOWN: 40
         };
     }
-    /** Event handlers. **/
     // Angular lifecycle hooks.
     SelectComponent.prototype.ngOnInit = function () {
         this.placeholderView = this.placeholder;
@@ -504,9 +506,9 @@ var SelectComponent = (function () {
     };
     SelectComponent.prototype.getStyleForMultipleTags = function (option) {
         if (this.customColoredTags && option) {
-            return "background-color: " + option.color + "; color: " + this.pickTextColorBasedOnBgColor(option.color) + " !important";
+            return this._sanitizer.bypassSecurityTrustStyle("background-color: " + option.color + "; color: " + this.pickTextColorBasedOnBgColor(option.color) + " !important");
         }
-        return '';
+        return null;
     };
     return SelectComponent;
 }());
@@ -520,7 +522,9 @@ SelectComponent.decorators = [
             },] },
 ];
 /** @nocollapse */
-SelectComponent.ctorParameters = function () { return []; };
+SelectComponent.ctorParameters = function () { return [
+    { type: platform_browser_1.DomSanitizer, },
+]; };
 SelectComponent.propDecorators = {
     'options': [{ type: core_1.Input },],
     'allowClear': [{ type: core_1.Input },],

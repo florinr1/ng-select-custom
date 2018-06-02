@@ -11,6 +11,7 @@ import {
     ViewEncapsulation,
     forwardRef
 } from '@angular/core';
+import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 import {NG_VALUE_ACCESSOR, ControlValueAccessor} from '@angular/forms';
 import {STYLE} from './select.component.css';
 import {TEMPLATE} from './select.component.html';
@@ -98,6 +99,8 @@ export class SelectComponent implements AfterViewInit, ControlValueAccessor, OnC
     private onTouched;
 
     /** Event handlers. **/
+
+    constructor(private _sanitizer: DomSanitizer) {}
 
     // Angular lifecycle hooks.
 
@@ -626,10 +629,10 @@ export class SelectComponent implements AfterViewInit, ControlValueAccessor, OnC
         return (L > 0.179) ? darkColor : lightColor;
       }
 
-      getStyleForMultipleTags(option) {
+      getStyleForMultipleTags(option): SafeStyle {
           if (this.customColoredTags && option) {
-              return `background-color: ${option.color}; color: ${this.pickTextColorBasedOnBgColor(option.color)} !important`;
+              return this._sanitizer.bypassSecurityTrustStyle(`background-color: ${option.color}; color: ${this.pickTextColorBasedOnBgColor(option.color)} !important`);
           }
-          return '';
+          return null;
       }
 }
