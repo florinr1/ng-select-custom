@@ -23,6 +23,7 @@ var SelectComponent = (function () {
         this.optionsListValueKey = 'value';
         this.optionsListLabelKey = 'label';
         this.optionsListColorKey = 'color';
+        this.customColoredTags = false;
         /**
          * If true, the component emits the value changed event immediately after setting it even if the options are not loaded.
          * This feature enables loading the data for linked components (e.g. address: country->county->city->street)
@@ -529,6 +530,7 @@ SelectComponent.propDecorators = {
     'optionsListValueKey': [{ type: core_1.Input },],
     'optionsListLabelKey': [{ type: core_1.Input },],
     'optionsListColorKey': [{ type: core_1.Input },],
+    'customColoredTags': [{ type: core_1.Input },],
     'notifyChangeBeforeOptionsLoaded': [{ type: core_1.Input },],
     'fetchFallbackOption': [{ type: core_1.Input },],
     'opened': [{ type: core_1.Output },],

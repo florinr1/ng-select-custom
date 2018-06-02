@@ -50,6 +50,7 @@ export class SelectComponent implements AfterViewInit, ControlValueAccessor, OnC
     @Input() optionsListValueKey: string = 'value';
     @Input() optionsListLabelKey: string = 'label';
     @Input() optionsListColorKey: string = 'color';
+    @Input() customColoredTags: boolean = false;
     /**
      * If true, the component emits the value changed event immediately after setting it even if the options are not loaded.
      * This feature enables loading the data for linked components (e.g. address: country->county->city->street)
