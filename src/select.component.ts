@@ -628,11 +628,8 @@ export class SelectComponent implements AfterViewInit, ControlValueAccessor, OnC
 
       getStyleForMultipleTags(option) {
           if (this.customColoredTags && option) {
-              return {
-                  color: this.pickTextColorBasedOnBgColor(option.color) + ' !important',
-                  backgroundColor: option.color
-              };
+              return `background-color: ${option.color}; color: ${this.pickTextColorBasedOnBgColor(option.color)} !important`;
           }
-          return {};
+          return '';
       }
 }
