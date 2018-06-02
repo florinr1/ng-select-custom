@@ -9,7 +9,7 @@ export class Option {
     shown: boolean;
     inactive: boolean;
 
-    constructor(value: string, label: string, color = '#eee') {
+    constructor(value: string, label: string, color?: string) {
         this.value = value;
         this.label = label;
         this.color = color;
