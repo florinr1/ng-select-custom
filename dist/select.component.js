@@ -481,7 +481,7 @@ var SelectComponent = (function () {
                 1 + this.placeholderView.length * 10 : 1 + value.length * 10;
         }
     };
-    SelectComponent.pickTextColorBasedOnBgColor = function (bgColor, lightColor, darkColor) {
+    SelectComponent.prototype.pickTextColorBasedOnBgColor = function (bgColor, lightColor, darkColor) {
         if (lightColor === void 0) { lightColor = '#ffffff'; }
         if (darkColor === void 0) { darkColor = '#000000'; }
         if (!bgColor) {

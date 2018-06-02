@@ -117,5 +117,5 @@ export declare class SelectComponent implements AfterViewInit, ControlValueAcces
     updateWidth(): void;
     updatePosition(): void;
     updateFilterWidth(): void;
-    static pickTextColorBasedOnBgColor(bgColor: any, lightColor?: string, darkColor?: string): string;
+    pickTextColorBasedOnBgColor(bgColor: any, lightColor?: string, darkColor?: string): string;
 }

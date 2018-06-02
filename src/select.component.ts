@@ -606,7 +606,7 @@ export class SelectComponent implements AfterViewInit, ControlValueAccessor, OnC
         }
     }
 
-    static pickTextColorBasedOnBgColor(bgColor, lightColor = '#ffffff', darkColor = '#000000') {
+    pickTextColorBasedOnBgColor(bgColor, lightColor = '#ffffff', darkColor = '#000000') {
         if (!bgColor) {
           return darkColor;
         }
