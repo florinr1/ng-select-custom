@@ -1,7 +1,7 @@
 export class Option {
-
     value: string;
     label: string;
+    color: string;
 
     disabled: boolean;
     highlighted: boolean;
@@ -9,9 +9,10 @@ export class Option {
     shown: boolean;
     inactive: boolean;
 
-    constructor(value: string, label: string) {
+    constructor(value: string, label: string, color = '#eeeeee') {
         this.value = value;
         this.label = label;
+        this.color = color;
 
         this.disabled = false;
         this.highlighted = false;

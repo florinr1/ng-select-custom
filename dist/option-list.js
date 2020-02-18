@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var option_1 = require("./option");
 var diacritics_1 = require("./diacritics");
 var OptionList = (function () {
-    function OptionList(options, optionsListValueKey, optionsListLabelKey, maxDisplayedOptions) {
+    function OptionList(options, optionsListValueKey, optionsListLabelKey, maxDisplayedOptions, optionsListColorKey) {
         var _this = this;
         /* Consider using these for performance improvement. */
         // private _selection: Array<Option>;
@@ -13,12 +13,13 @@ var OptionList = (function () {
         this._optionsListValueKey = optionsListValueKey;
         this._optionsListLabelKey = optionsListLabelKey;
         this._maxDisplayedOptions = maxDisplayedOptions;
+        this._optionsListColorKey = optionsListColorKey;
         if (typeof options === 'undefined' || options === null) {
             options = [];
         }
         this._options = options.map(function (option) {
             // Convert the value to string to match the default HTML select behaviour
-            var o = new option_1.Option(String(option[_this._optionsListValueKey]), option[_this._optionsListLabelKey]);
+            var o = new option_1.Option(String(option[_this._optionsListValueKey]), option[_this._optionsListLabelKey], option[_this._optionsListColorKey]);
             if (option.disabled) {
                 o.disable();
             }

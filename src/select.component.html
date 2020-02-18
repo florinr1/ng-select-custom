@@ -36,6 +36,7 @@
     <div class="multiple"
         *ngIf="multiple">
         <div class="option"
+            [attr.style]="getStyleForMultipleTags(option)"
             *ngFor="let option of optionList.selection">
             <span class="deselect-option"
                 (click)=onDeselectOptionClick(option)>

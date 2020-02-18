@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
+var platform_browser_1 = require("@angular/platform-browser");
 var forms_1 = require("@angular/forms");
 var select_component_css_1 = require("./select.component.css");
 var select_component_html_1 = require("./select.component.html");
@@ -12,7 +13,9 @@ exports.SELECT_VALUE_ACCESSOR = {
     multi: true
 };
 var SelectComponent = (function () {
-    function SelectComponent() {
+    /** Event handlers. **/
+    function SelectComponent(_sanitizer) {
+        this._sanitizer = _sanitizer;
         this.allowClear = false;
         this.disabled = false;
         this.multiple = false;
@@ -22,6 +25,8 @@ var SelectComponent = (function () {
         this.maxDisplayedOptionsMessage = 'Please filter the results';
         this.optionsListValueKey = 'value';
         this.optionsListLabelKey = 'label';
+        this.optionsListColorKey = 'color';
+        this.customColoredTags = false;
         /**
          * If true, the component emits the value changed event immediately after setting it even if the options are not loaded.
          * This feature enables loading the data for linked components (e.g. address: country->county->city->street)
@@ -58,7 +63,6 @@ var SelectComponent = (function () {
             DOWN: 40
         };
     }
-    /** Event handlers. **/
     // Angular lifecycle hooks.
     SelectComponent.prototype.ngOnInit = function () {
         this.placeholderView = this.placeholder;
@@ -255,7 +259,7 @@ var SelectComponent = (function () {
             // preserve the selected value on second+ run
             v = this.optionList.value;
         }
-        this.optionList = new option_list_1.OptionList(this.options, this.optionsListValueKey, this.optionsListLabelKey, this.maxDisplayedOptions);
+        this.optionList = new option_list_1.OptionList(this.options, this.optionsListValueKey, this.optionsListLabelKey, this.maxDisplayedOptions, this.optionsListColorKey);
         if (!firstTime && !this.keepValueUntilFirstOptionsAreSet) {
             if (!this.optionList.setValue(v)) {
                 this.loadFallbackOption(v);
@@ -480,6 +484,32 @@ var SelectComponent = (function () {
                 1 + this.placeholderView.length * 10 : 1 + value.length * 10;
         }
     };
+    SelectComponent.prototype.pickTextColorBasedOnBgColor = function (bgColor, lightColor, darkColor) {
+        if (lightColor === void 0) { lightColor = '#ffffff'; }
+        if (darkColor === void 0) { darkColor = '#000000'; }
+        if (!bgColor) {
+            return darkColor;
+        }
+        var color = (bgColor.charAt(0) === '#') ? bgColor.substring(1, 7) : bgColor;
+        var r = parseInt(color.substring(0, 2), 16); // hexToR
+        var g = parseInt(color.substring(2, 4), 16); // hexToG
+        var b = parseInt(color.substring(4, 6), 16); // hexToB
+        var uicolors = [r / 255, g / 255, b / 255];
+        var c = uicolors.map(function (col) {
+            if (col <= 0.03928) {
+                return col / 12.92;
+            }
+            return Math.pow((col + 0.055) / 1.055, 2.4);
+        });
+        var L = (0.2126 * c[0]) + (0.7152 * c[1]) + (0.0722 * c[2]);
+        return (L > 0.179) ? darkColor : lightColor;
+    };
+    SelectComponent.prototype.getStyleForMultipleTags = function (option) {
+        if (this.customColoredTags && option) {
+            return this._sanitizer.bypassSecurityTrustStyle("background-color: " + option.color + "; color: " + this.pickTextColorBasedOnBgColor(option.color) + " !important");
+        }
+        return null;
+    };
     return SelectComponent;
 }());
 SelectComponent.decorators = [
@@ -492,7 +522,9 @@ SelectComponent.decorators = [
             },] },
 ];
 /** @nocollapse */
-SelectComponent.ctorParameters = function () { return []; };
+SelectComponent.ctorParameters = function () { return [
+    { type: platform_browser_1.DomSanitizer, },
+]; };
 SelectComponent.propDecorators = {
     'options': [{ type: core_1.Input },],
     'allowClear': [{ type: core_1.Input },],
@@ -507,6 +539,8 @@ SelectComponent.propDecorators = {
     'maxDisplayedOptionsMessage': [{ type: core_1.Input },],
     'optionsListValueKey': [{ type: core_1.Input },],
     'optionsListLabelKey': [{ type: core_1.Input },],
+    'optionsListColorKey': [{ type: core_1.Input },],
+    'customColoredTags': [{ type: core_1.Input },],
     'notifyChangeBeforeOptionsLoaded': [{ type: core_1.Input },],
     'fetchFallbackOption': [{ type: core_1.Input },],
     'opened': [{ type: core_1.Output },],
